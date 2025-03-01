@@ -49,14 +49,21 @@ def autocorrect(text):
     model = T5ForConditionalGeneration.from_pretrained(model_name)
 
     # Prepare input
-    input_text = f"fix: {text}"
+    input_text = f"fix:\n{text}"
     input_ids = tokenizer(input_text, return_tensors="pt").input_ids
 
     # Generate corrections
-    outputs = model.generate(input_ids, max_length=50)
-    corrected_sentence = tokenizer.decode(outputs[0], skip_special_tokens=True)[5:]
+    outputs = model.generate(input_ids, max_length=250)
+    corrected_sentence = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    if prefix(corrected_sentence, "fix:") or prefix(corrected_sentence, "Fix:"):
+        corrected_sentence = corrected_sentence[5:]
     print(corrected_sentence)
     return corrected_sentence
+
+def prefix(text, prefix):
+    if len(text) <= len(prefix):
+        return False
+    return text[:len(prefix)] == prefix
 
 
 def emotionDetection(text):
@@ -85,21 +92,29 @@ def tokenisation(text):
     clauses = []
     current_clause = []
 
+    last_was_punctuation = False
+
     for token in doc:
         if token.text.lower() in splits:
             if current_clause:
                 clauses.append(" ".join(current_clause).strip())
                 current_clause = []
             clauses.append(token.text)
+            last_was_punctuation = False
+
         elif token.text in punctuation:
             if current_clause:
                 current_clause[-1] += token.text
             else:
                 current_clause.append(token.text)
-            clauses.append(" ".join(current_clause).strip())
-            current_clause = []
+            last_was_punctuation = True
+
         else:
+            if last_was_punctuation and current_clause:
+                clauses.append(" ".join(current_clause).strip())
+                current_clause = []
             current_clause.append(token.text)
+            last_was_punctuation = False
 
     if current_clause:
         clauses.append(" ".join(current_clause).strip())

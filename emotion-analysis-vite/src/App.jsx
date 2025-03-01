@@ -104,7 +104,7 @@ function App() {
     <div className="min-h-screen min-w-screen flex bg-gray-100 items-center justify-center">
       {/* Title Container - Outside the White Box, Above the Content */}
       <div className="w-full column max-w-md text-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-700">Emotion Analysis</h1>
+        <h1 className="text-3xl font-bold text-gray-700">The Emotion Detection Automation</h1>
       </div>
   
       {/* White Box Container - This part is below the Title */}
