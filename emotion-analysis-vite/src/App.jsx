@@ -13,7 +13,7 @@ function App() {
 
     try {
       // Replace with your actual API endpoint
-      const res = await fetch("https://your-api-endpoint.com/submit", {
+      const res = await fetch("https:///submit", {
         method: "POST", // Use GET if you're not sending data via POST
         headers: {
           "Content-Type": "application/json",
