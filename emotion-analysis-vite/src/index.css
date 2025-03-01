@@ -36,8 +36,50 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+.textarea-large {
+  min-height: 40vh; /* Take at least the full height of the screen */
+  min-width: 35vw;
+  width: 100%; /* Full width */
+  height: 300px; /* Increased height */
+  padding: 1em; /* Adjust padding */
+  border: 1px solid #ccc; /* Border styling */
+  border-radius: 8px; /* Rounded corners */
+  font-size: 1em; /* Font size */
+  resize: none; /* Disable resizing */
+}
+
+.output-box-large {
+  min-height: 40vh; /* Take at least the full height of the screen */
+  min-width: 35vw;
+  width: 100%; /* Full width */
+  height: 300px; /* Increased height */
+  padding: 1em; /* Adjust padding */
+  border: 1px solid #ccc; /* Border styling */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #f9f9f9; /* Background color */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px; /* Set a max-width for the container */
+  margin: 0 auto; /* Center the container */
+  padding: 1em; /* Add padding */
+  background-color: #ffffff; /* Background color for the container */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} 
+
+.form-container {
+  width: 100%;
+}
 
 button {
+  width: 100px; /* Increase width */
+  height: 50px;
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -47,6 +89,15 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+}
+
+.small-button:hover {
+  border-color: #646cff;
+}
+
+.small-button:focus,
+.small-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
 button:hover {
   border-color: #646cff;

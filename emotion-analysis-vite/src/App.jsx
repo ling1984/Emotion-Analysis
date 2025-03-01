@@ -34,35 +34,31 @@ const labelColors = {
 
 const ResponseDisplay = ({ response }) => {
   return (
-    <div>
-      {/* Display Container */}
-      <div className="w-full h-40 p-3 border rounded-lg bg-gray-50 overflow-auto">
-        {response && response.length > 0 ? (
-          response.map(([text, labels], index) => (
-            <div key={index} className="p-2 border-b last:border-none">
-              <p className="text-lg font-semibold">{text}</p>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {labels.map((labelObj, idx) => (
-                  <span
-                    key={idx}
-                    className={`px-2 py-1 rounded-lg text-sm font-medium ${
-                      labelColors[labelObj.label] || "bg-gray-200 text-gray-800"
-                    }`}
-                  >
-                    {labelObj.label} ({(labelObj.score * 100).toFixed(1)}%)
-                  </span>
-                ))}
-              </div>
+    <div className="output-box-large">
+      {response && response.length > 0 ? (
+        response.map(([text, labels], index) => (
+          <div key={index} className="p-2 border-b last:border-none">
+            <p className="text-lg font-semibold">{text}</p>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {labels.map((labelObj, idx) => (
+                <span
+                  key={idx}
+                  className={`px-2 py-1 rounded-lg text-sm font-medium ${
+                    labelColors[labelObj.label] || "bg-gray-200 text-gray-800"
+                  }`}
+                >
+                  {labelObj.label} ({(labelObj.score * 100).toFixed(1)}%)
+                </span>
+              ))}
             </div>
-          ))
-        ) : (
-          <span className="text-gray-400">Output will appear here...</span>
-        )}
-      </div>
+          </div>
+        ))
+      ) : (
+        <span className="text-gray-400">Output will appear here...</span>
+      )}
     </div>
   );
 };
-
 
 
 function App() {
@@ -102,42 +98,37 @@ function App() {
 
   return (
     <div className="min-h-screen min-w-screen flex bg-gray-100 items-center justify-center">
-      {/* Title Container - Outside the White Box, Above the Content */}
-      <div className="w-full column max-w-md text-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-700">The Emotion Detection Automation</h1>
-      </div>
-  
-      {/* White Box Container - This part is below the Title */}
-      <div className="flex w-full flex max-w-md p-6 bg-white rounded-2xl shadow-lg">
-        {/* Form Container */}
-        <div className="mb-6">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
-            {/* Input Box */}
+      <div className="container">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-700">The Emotion Detection Automation</h1>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {/* Input Box and Display Container */}
+          <div className="flex gap-4">
             <textarea
-              className="w-full h-40 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="textarea-large"
               placeholder="Type something..."
               value={text}
               onChange={(e) => setText(e.target.value)}
             />
-            {/* Submit Button */}
+            <ResponseDisplay response={response} />
+          </div>
+
+          {/* Submit Button Container */}
+          <div className="text-center mt-4">
             <button
               type="submit"
-              className="p-3 bg-blue-100 text-black rounded-lg hover:bg-blue-600"
+              className="p-2 w-24 bg-blue-100 text-black rounded-lg hover:bg-blue-600 flex items-center justify-center"
               disabled={loading}
             >
               {loading ? "Loading..." : "Submit"}
             </button>
-          </form>
-        </div>
-  
-        <div>
-      {/* Display Container */}
-      <ResponseDisplay response={response} />
-    </div>
+          </div>
+        </form>
       </div>
     </div>
   );
-  
-}
-  
+}  
+
 export default App;
