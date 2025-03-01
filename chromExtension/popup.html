@@ -3,15 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Emotion Analysis</title>
+    <script src="popup.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script> 
+    <style>
+        body { width: 300px; padding: 10px; background-color: #f9f9f9; }
+    </style>
 </head>
 <body>
-    <h2>Chatbot</h2>
-    <textarea id="userInput" placeholder="Type a message..."></textarea>
-    <button id="sendText">Send</button>
-    <button id="recordAudio">🎤 Voice</button>
-    <div id="response"></div>
-    <script src="popup.js"></script>
+    <h1 class="text-lg font-bold text-gray-700 text-center">Emotion Analysis</h1>
+
+    <input 
+        type="text" 
+        id="userInput" 
+        placeholder="Enter your message..." 
+        class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300 mt-2"
+    />
+    <button 
+        id="sendText" 
+        class="w-full mt-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+    >
+        Send
+    </button>
+
+    <div id="responseContainer" class="mt-4 space-y-3">
+        <p class="text-gray-400 text-center">Response will appear here...</p>
+    </div>
 </body>
 </html>
