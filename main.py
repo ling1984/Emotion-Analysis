@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from transformers import T5ForConditionalGeneration, T5Tokenizer
@@ -40,6 +40,12 @@ async def receive_data(data: TextData):
     emotions = emotionDetection(corrected_text)
     print(emotions)
     return {"result": emotions}
+
+@app.post("/recording")
+async def receive_audio(data: UploadFile):
+    # Read the audio file
+
+    return {"result": "Nearly supported.. please wait for the next update!"}
 
 
 def autocorrect(text):
