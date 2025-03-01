@@ -30,4 +30,4 @@ for token in doc:
 if current_clause:
     clauses.append(" ".join(current_clause).strip())
 
-print(clauses) 
+print(clauses)
