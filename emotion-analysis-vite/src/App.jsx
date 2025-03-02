@@ -161,7 +161,7 @@ function App() {
     <div className="min-h-screen min-w-screen flex bg-gray-100 items-center justify-center">
       <div className="container">
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-700">The Emotion Detection Automation</h1>
+          <h1 className="text-3xl font-bold text-gray-700">Emotion Detection Automation</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
