@@ -64,7 +64,6 @@ function App() {
   const [text, setText] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
-  const [speakLoading, setSpeakLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const mediaChunks = useRef([]);
@@ -130,12 +129,32 @@ function App() {
     if (mediaRecorder) {
       mediaRecorder.stop();
       setIsRecording(false);
+
+      mediaRecorder.stream.getTracks().forEach(track => track.stop());
     }
   };
 
   const uploadAudio = async (audioBlob) => {
     const formData = new FormData();
     formData.append("file", audioBlob, "recording.webm");
+  
+    try {
+      const response = await fetch("http://127.0.0.1:8000/recording", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to upload audio");
+      }
+  
+      const data = await response.json();
+      console.log("Server response:", data);
+      setResponse(data.result || "Audio processed successfully");
+    } catch (error) {
+      console.error("Error uploading audio:", error);
+      setResponse("Error uploading audio: " + error.message);
+    }
   };
 
   return (
