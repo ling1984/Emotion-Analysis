@@ -52,10 +52,11 @@ async def upload_audio(file: UploadFile = File(...)):
 
     # Process audio file (e.g., transcribe, analyze)
     STT = pipeline("automatic-speech-recognition", model="openai/whisper-medium")
-    text = STT(file_path)
-
-    result = {"text": text["text"]}
-    return result
+    received_text = STT(file_path)
+    corrected_text = tokenisation(preprocessing(autocorrect(received_text)))
+    emotions = emotionDetection(corrected_text)
+    print(emotions)
+    return {"result": emotions}
 
 def autocorrect(text):
     # Load the best available plug-and-play model
