@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Emotion Detection Automation",
+  "version": "1.0",
+  "description": "Chatbot with emotion detection and web scraping",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["http://*/*", "https://*/*"], 
+  "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icon2.png"
+  },
+  "background": {
+      "service_worker": "background.js"
+  },
+  "content_scripts": [
+      {
+          "matches": ["http://*/*", "https://*/*"],
+          "js": ["content.js"]
+      }
+  ]
+}
