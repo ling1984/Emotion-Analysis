@@ -7,6 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Handle chatbot text submission
+    let responseContainer = document.getElementById("responseContainer");
+
+    if (!responseContainer) {
+        console.error("Error: responseContainer does not exist in popup.html");
+        return;
+    }
+
+    // Handle chatbot text submission
     document.getElementById("sendText").addEventListener("click", async () => {
         let userInput = document.getElementById("userInput").value;
         if (!userInput) return;
@@ -19,14 +27,31 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             if (!response.ok) throw new Error("Network response was not ok");
+        try {
+            let response = await fetch("http://127.0.0.1:8000/submit", { 
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: userInput }),
+            });
 
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            let data = await response.json();
+            responseContainer.innerHTML = ""; // Clear previous responses
             let data = await response.json();
             responseContainer.innerHTML = ""; // Clear previous responses
 
             data.result.forEach(([text, labels]) => {
                 let messageDiv = document.createElement("div");
                 messageDiv.className = "p-3 border rounded-lg bg-gray-50 shadow-md";
+            data.result.forEach(([text, labels]) => {
+                let messageDiv = document.createElement("div");
+                messageDiv.className = "p-3 border rounded-lg bg-gray-50 shadow-md";
 
+                let textElement = document.createElement("p");
+                textElement.className = "text-lg font-semibold";
+                textElement.innerText = text;
+                messageDiv.appendChild(textElement);
                 let textElement = document.createElement("p");
                 textElement.className = "text-lg font-semibold";
                 textElement.innerText = text;
