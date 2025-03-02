@@ -1,12 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from transformers import T5ForConditionalGeneration, T5Tokenizer
+from transformers import T5ForConditionalGeneration, T5Tokenizer, pipeline
 # Use a pipeline as a high-level helper
 from transformers import pipeline
 import spacy
 import re
-
+import shutil
+import os
 
 origins = [
     "http://localhost",  # Allow localhost requests
@@ -41,6 +42,20 @@ async def receive_data(data: TextData):
     print(emotions)
     return {"result": emotions}
 
+@app.post("/recording")
+async def upload_audio(file: UploadFile = File(...)):
+    file_path = f"temp_audio/{file.filename}"
+    os.makedirs("temp_audio", exist_ok=True)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    # Process audio file (e.g., transcribe, analyze)
+    STT = pipeline("automatic-speech-recognition", model="openai/whisper-medium")
+    text = STT(file_path)
+
+    result = {"text": text["text"]}
+    return result
 
 def autocorrect(text):
     # Load the best available plug-and-play model
