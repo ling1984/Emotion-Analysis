@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 
 const labelColors = {
@@ -60,11 +60,14 @@ const ResponseDisplay = ({ response }) => {
   );
 };
 
-
 function App() {
   const [text, setText] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const [speakLoading, setSpeakLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const mediaChunks = useRef([]);
 
 
   const handleSubmit = async (e) => {
@@ -96,6 +99,45 @@ function App() {
     }
   };
 
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          mediaChunks.current.push(event.data);
+        }
+      };
+
+      recorder.onstop = async () => {
+        const audioBlob = new Blob(mediaChunks.current, { type: "audio/webm" });
+        mediaChunks.current = []; // Clear recorded chunks
+
+        // Send the audioBlob to the server
+        await uploadAudio(audioBlob);
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+    } catch (error) {
+      console.error("Error starting recording:", error);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const uploadAudio = async (audioBlob) => {
+    const formData = new FormData();
+    formData.append("file", audioBlob, "recording.webm");
+  };
+
   return (
     <div className="min-h-screen min-w-screen flex bg-gray-100 items-center justify-center">
       <div className="container">
@@ -116,13 +158,22 @@ function App() {
           </div>
 
           {/* Submit Button Container */}
-          <div className="text-center mt-4">
+          <div className="flex justify-center mt-4 gap-x-4">
             <button
               type="submit"
               className="p-2 w-24 bg-blue-100 text-black rounded-lg hover:bg-blue-600 flex items-center justify-center"
-              disabled={loading}
+              disabled={loading || isRecording}
             >
-              {loading ? "Loading..." : "Submit"}
+              {loading ? "Loading..." : "Text"}
+            </button>
+
+            <button
+              type="button"
+              className="p-2 w-24 bg-blue-100 text-black rounded-lg hover:bg-blue-600 flex items-center justify-center"
+              disabled={loading}
+              onClick={isRecording ? stopRecording : startRecording}
+            >
+              {isRecording ? "Stop Recording" : "Start Recording"}
             </button>
           </div>
         </form>
